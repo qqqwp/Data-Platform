@@ -1,3 +1,55 @@
+# traffic（交通数据中台）
+
+前端：Vue 3 + Vite + 高德地图 JS API  
+后端：FastAPI + PostgreSQL（你本地 docker 容器暴露 `5432`）
+
+## 1) 启动数据库（你已有）
+
+```bash
+docker run -d -p 5432:5432 trajdb-image
+```
+
+## 2) 配置后端数据库连接
+
+在 `backend/` 下新建 `backend/.env`（参考 `backend/.env.example`）：
+
+```dotenv
+DATABASE_URL=postgresql+asyncpg://postgres:tangxiaohui0722@localhost:5432/trajdb
+APP_CORS_ORIGINS=http://localhost:8081
+```
+
+## 3) 安装依赖
+
+前端：
+
+```bash
+npm install
+```
+
+后端（建议创建虚拟环境）：
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r backend/requirements.txt
+```
+
+## 4) 一条命令启动（前后端一起）
+
+```bash
+npm run dev
+```
+
+- 前端：`http://localhost:8081`
+- 后端：`http://localhost:8000`（健康检查：`/api/health`）
+
+## 5) 功能入口
+
+- 轨迹分析：`/trip`（输入 `trip_id`，地图还原轨迹；按速度阈值将路段标红/标绿）
+- 车辆画像：`/car`（输入 `device_id`，展示 2 小时分布与轨迹列表；点击 `trip_id` 可跳转轨迹页）
+
+
+
 # Data-Platform
 交通数据中台 第①小组
 
