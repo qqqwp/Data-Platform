@@ -3,14 +3,18 @@
 前端：Vue 3 + Vite + 高德地图 JS API  
 后端：FastAPI + PostgreSQL（本地 docker 容器暴露 `5432`）
 
-## 1) 启动数据库（你已有）
+## 1) 启动数据库
+下载镜像
+```bash
+docker pull theadoratang722/trajdb-image
+```
 
 ```bash
 docker run -d -p 5432:5432 trajdb-image
 ```
 
 ## 2) 配置后端数据库连接
-docker链接 密码后续可能修改
+docker链接 密码后续可能修改 现在先不用动，这步忽略
 
 在 `backend/` 下新建 `backend/.env`
 
@@ -49,6 +53,7 @@ npm run dev
 - 轨迹分析：`/trip`（输入 `trip_id`，地图还原轨迹；按速度阈值将路段标红/标绿）
 - 车辆画像：`/car`（输入 `device_id`，展示 2 小时分布与轨迹列表；点击 `trip_id` 可跳转轨迹页）
 
+tips：requirements.txt可能不全，如果运行碰壁先自行解决一下，基本都是module问题
 
 
 # Data-Platform
