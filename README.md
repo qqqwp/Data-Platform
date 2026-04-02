@@ -10,7 +10,7 @@ docker pull theadoratang722/trajdb-image
 ```
 
 ```bash
-docker run -d -p 5432:5432 trajdb-image
+docker run -d -p 5432:5432 theadoratang722/trajdb-image
 ```
 
 ## 2) 配置后端数据库连接
