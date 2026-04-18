@@ -5,10 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .car_portrait import fetch_car_portrait
 from .db import get_db
 from .schemas import (
     AnomalyRoadDistributionResponse,
     AnomalyVehicleRankingResponse,
+    CarPortraitResponse,
     CarProfile,
     CarTripsItem,
     HealthResponse,
@@ -102,6 +104,14 @@ async def get_car(device_id: str, db: AsyncSession = Depends(get_db)) -> CarProf
     if not car:
         raise HTTPException(status_code=404, detail="car not found")
     return car
+
+
+@app.get("/api/cars/{device_id}/portrait", response_model=CarPortraitResponse)
+async def get_car_portrait(device_id: str, db: AsyncSession = Depends(get_db)) -> CarPortraitResponse:
+    portrait = await fetch_car_portrait(db, device_id)
+    if not portrait:
+        raise HTTPException(status_code=404, detail="car not found or no trips available")
+    return portrait
 
 
 @app.get("/api/cars/{device_id}/trips", response_model=list[CarTripsItem])

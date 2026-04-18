@@ -10,6 +10,9 @@ AnomalyType = Literal["detour", "stop", "speed_jump", "drift", "jump_point"]
 SegmentType = Literal["normal", "detour", "stop", "speed_jump", "drift", "jump_point"]
 SeverityLevel = Literal["none", "low", "medium", "high"]
 RiskLevel = Literal["low", "medium", "high"]
+OperationMode = Literal["night_shift", "commuter_peak", "long_haul", "local_shuttle", "steady_all_day"]
+ShiftCode = Literal["night", "morning_peak", "daytime", "evening_peak", "mixed"]
+RegionCode = Literal["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"]
 
 
 class TripPoint(BaseModel):
@@ -66,6 +69,69 @@ class CarTripsItem(BaseModel):
     duration_seconds: float | None = None
     start_time: datetime | None = None
     end_time: datetime | None = None
+
+
+class CarPortraitSummary(BaseModel):
+    device_id: str
+    total_trips: int
+    total_distance_km: float
+    avg_trip_distance_km: float
+    avg_trip_duration_minutes: float
+    active_days: int
+    avg_daily_work_hours: float
+    dominant_shift: ShiftCode
+    operation_mode: OperationMode
+    night_trip_ratio: float
+    hotspot_concentration: float
+
+
+class ActiveTimeBin(BaseModel):
+    label: str
+    trip_count: int
+    distance_km: float
+    share_ratio: float
+
+
+class RegionRadarItem(BaseModel):
+    region: RegionCode
+    score: float
+    trip_count: int
+
+
+class DailyRhythmItem(BaseModel):
+    date: date
+    first_start_hour: float | None = None
+    last_end_hour: float | None = None
+    work_span_hours: float | None = None
+    trip_count: int
+    distance_km: float
+
+
+class RouteClusterItem(BaseModel):
+    cluster_key: str
+    trip_count: int
+    avg_distance_km: float
+    avg_start_hour: float | None = None
+    start_center: tuple[float, float]
+    end_center: tuple[float, float]
+
+
+class PeerGroupItem(BaseModel):
+    device_id: str
+    operation_mode: OperationMode
+    avg_trip_distance_km: float
+    avg_daily_work_hours: float
+    total_trips: int
+    is_current: bool = False
+
+
+class CarPortraitResponse(BaseModel):
+    summary: CarPortraitSummary
+    active_time_bins: list[ActiveTimeBin] = Field(default_factory=list)
+    region_radar: list[RegionRadarItem] = Field(default_factory=list)
+    daily_rhythm: list[DailyRhythmItem] = Field(default_factory=list)
+    route_clusters: list[RouteClusterItem] = Field(default_factory=list)
+    peer_groups: list[PeerGroupItem] = Field(default_factory=list)
 
 
 class HealthResponse(BaseModel):
