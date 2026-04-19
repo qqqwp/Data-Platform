@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TripView from '@/views/TripView.vue'
 import CarView from '@/views/CarView.vue'
 import AnomalyView from '@/views/AnomalyView.vue'
+import DemandView from '@/views/DemandView.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -11,6 +12,7 @@ export default createRouter({
     { path: '/trip', component: TripView },
     { path: '/car', component: CarView },
     { path: '/anomaly', component: AnomalyView },
+    { path: '/demand', component: DemandView },
   ],
 })
 
